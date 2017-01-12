@@ -59,6 +59,32 @@
 
 <script>
 
+  function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if (!audio) return; //stop the function from running at all
+    audio.currentTime = 0; //rewind to the start
+    audio.play();
+    key.classList.add('playing');
+    // key.classList.remove('playing')
+    // key.classList.toggle('playing')
+  }
+
+  function removeTransition(e){
+    if(e.propertyName !== 'transform') return; //skip if its not a transform
+
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key')
+  //reason for grabbing all the keys using document.querySelector
+  //vs. keys.addEventListener('transition') is because
+  //when you have an array an elements you cannot add a listener to
+  //you must loop over and put a listener on each element thus we use forEach
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  // if e.keyCode == document.querySelector('audio')
+  window.addEventListener('keydown', playSound);
+
 </script>
 
 
